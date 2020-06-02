@@ -1,12 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks to do</title>
-    <style></style>
+    <title>My Task Board (Ron Eliyahou)</title>
+    <style>
+        body {
+            background-image: url("images/tile.jpg");
+        }
+
+        #titleimg {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -200px;
+        }
+        div > h3 {
+            position:fixed;
+            background-image: url('Images/formbg.jpg');
+            width: 500px;
+            height: 83px;
+            left: 45%;
+            top: 26%;
+            margin-top: -100px;
+            margin-left: -200px;
+        }
+        h3 > button {
+            position: absolute;
+            left: 85%;
+            top : 65%;
+        }
+    </style>
 </head>
+
 <body>
-    <script href=""></script>    
+    <div>
+            <img id="titleimg" src="Images/title.png">
+    </div>
+    <div>
+        <h3>
+        <input type="text"><br><br>
+        <input type="date">
+        
+        <button type="button">Add</button>
+    </h3>
+    </div>
+    <script href=""></script>
+   
+
 </body>
+
 </html>
