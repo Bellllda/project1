@@ -15,31 +15,60 @@
             font-size: 50px;
             text-align: center;
         }
-        .outer {
+
+        #form {
             background-image: url("Images/formbg.jpg");
             text-align: center;
-            padding: 0.18%;
+
+            position: relative;
+            height: 114px;
         }
-        h3 {
-            position:relative;
-        }
-        h3 > button {
+
+
+        #tasket {
             position: absolute;
-            left: 60%;
-            top : 90%;
+            left: 50%;
+            top: 17%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            transform: translateX(-50%);
         }
+
+        #datet {
+            position: absolute;
+            left: 50%;
+            top: 46%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            transform: translateX(-50%);
+        }
+
+        #submit {
+            position: absolute;
+            left: 56%;
+            top: 75%;
+        }
+
+        #reset {
+            position: absolute;
+            left: 59.3%;
+            top: 75%;
+        }
+
         #contain {
-            position:relative;
-            display:flex;
+            position: relative;
+            display: flex;
             flex-wrap: wrap;
-            overflow:auto;
+            overflow: auto;
         }
+
         li {
             position: relative;
             list-style-type: none;
-            
+
         }
-        li > h4  {
+
+        li>h4 {
             position: absolute;
             padding: 2px 2px 10px 2px;
             width: 160px;
@@ -54,7 +83,8 @@
             font-weight: 500;
             top: 6%;
         }
-        li > h5 {
+
+        li>h5 {
             position: absolute;
             width: 80px;
             height: 20px;
@@ -62,6 +92,7 @@
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
         }
+
         .noted {
             background-image: url("Images/notebg.png");
             background-repeat: no-repeat;
@@ -70,71 +101,174 @@
             height: 250px;
 
         }
-        span {
+
+        .delete {
             position: absolute;
             left: 79.8%;
             top: 8%;
             font-size: 22px;
             font-weight: bolder;
+            transition: opacity 0.5s;
+        }
+
+        .delete-fade-in {
+            opacity: 1;
+        }
+
+        .delete-fade-out {
+            opacity: 0;
         }
     </style>
 </head>
 
 <body>
     <div>
-            <h1 id="titletext">My Task Board</h1>
+        <h1 id="titletext">My Task Board</h1>
     </div>
-    <form class="outer">
-        <h3>
+    <form id="form">
+
         <!--text-->
-        <label> Enter your task: <input id="task" type="text"></label><br><br>
+        <label id="tasket"> Enter your task: <input id="task" type="text"></label>
         <!--date-->
-        <label>Enter due date: <input id= "date" type="date"></label>
+        <label id="datet">Enter due date: <input id="date" type="date"></label>
         <!--submit-->
         <button id="submit" onclick="newNote()" type="button">Submit</button>
-    </h3>
-</form>
-<div id = "contain">
-    
+        <button id="reset" onclick="resetInput()" type="button">Reset</button>
 
-</div>    
-    
-    
+    </form>
+    <div id="contain">
+
+
+    </div>
+
+
     <script>
-        
-    function newNote () {
-        var li = document.createElement("li");
-        li.className = "noted"
-        var inputVal = document.getElementById("task").value;
-        var tex = document.createTextNode(inputVal);
-        li.innerHTML += `<h4>${tex.nodeValue}</h4>`
-        
-        if (inputVal === "") {
-            alert("You need to write something in the text box");   
-        } else {
-            var dateVal = document.getElementById("date").value;
-            var det = document.createTextNode(dateVal);
-            li.innerHTML += `<br><h5>${det.nodeValue}</h5>`
+        function resetInput() {
+            document.getElementById("task").value = "";
+            document.getElementById("date").value = "";
+        }
 
-            if (dateVal === ""){
-                alert("You need to write a date")
-            
+
+
+        var ids = 1;
+        var Note = [];
+        function newNote() {
+            var li = document.createElement("li");
+            li.className = "noted"
+            var inputVal = document.getElementById("task").value;
+            var tex = document.createTextNode(inputVal);
+            li.innerHTML += `<h4>${tex.nodeValue}</h4>`
+
+            if (inputVal === "") {
+                alert("You need to write something in the text box");
             } else {
-            document.getElementById("contain").appendChild(li);
+                var dateVal = document.getElementById("date").value;
+                var det = document.createTextNode(dateVal);
+                li.innerHTML += `<br><h5>${det.nodeValue}</h5>`
+
+                if (dateVal === "") {
+                    alert("You need to write a date")
+
+                } else {
+                    document.getElementById("contain").appendChild(li);
+
+                    var delet = document.createElement("span");
+                    var ex = document.createTextNode("\u00D7");
+                    delet.classList = "delete delete-fade-out";
+                    delet.id = ids
+                    delet.appendChild(ex);
+                    li.appendChild(delet);
+
+                    noted = new Object();
+                    noted["text"] = inputVal;
+                    noted["date"] = dateVal;
+
+
+
+
+
+                    delet.onclick = function () {
+                        var sure = window.confirm("Are you sure you want to delete this note?")
+                        if (sure === true) {
+                            this.parentElement.remove()
+                            localStorage.removeItem("everything");
+                            localStorage.setItem("count", JSON.stringify(ids))
+                            Note = Note.filter(item => item.id !== parseInt(delet.id))
+                            localStorage.setItem("everything", JSON.stringify(Note))
+
+
+
+
+
+                        }
+                    }
+                    Note.push(noted);
+                    document.getElementById("task").value = "";
+                    document.getElementById("date").value = "";
+
+                }
+                localStorage.setItem("everything", JSON.stringify(Note));
+                localStorage.setItem("count", JSON.stringify(ids));
+
             }
         }
-        document.getElementById("task").value = "";
-        document.getElementById("date").value = "";
 
-        var span = document.createElement("span");
-        var txt = document.createTextNode("\u00D7");
-        span.className = "delete";
-        span.appendChild(txt);
-        li.appendChild(span);
+        window.onload = function () {
+            var every = localStorage.getItem("everything");
+            if (!every) {
+                return;
+            }
+            var counted = localStorage.getItem("count")
+            if (!counted) {
+                return;
+            }
+            Note = JSON.parse(every)
+            ids = JSON.parse(counted)
 
-    }
-        </script>
-   
+            for (var i = 0; i < Note.length; i++) {
+                texte = Note[i].text
+                datee = Note[i].date
+
+                var li = document.createElement("li");
+                li.className = "noted"
+                var textee = document.createTextNode(texte);
+                li.innerHTML += `<h4>${textee.nodeValue}</h4>`
+
+                var dete = document.createTextNode(datee);
+                li.innerHTML += `<br><h5>${dete.nodeValue}</h5>`
+
+                document.getElementById("contain").appendChild(li);
+
+                var delet = document.createElement("span");
+                var ex = document.createTextNode("\u00D7");
+                delet.classList = "delete delete-fade-out";
+                delet.id = ids
+                delet.appendChild(ex);
+                li.appendChild(delet);
+
+                delet.parentElement.addEventListener("mouseenter", (ev) => show())
+                delet.parentElement.addEventListener("mouseleave", (ev) => hide())
+                function hide() {
+                    delet.className = "delete delete-fade-out"
+                }
+                function show() {
+                    delet.className = "delete delete-fade-in"
+                }
+
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+
 
 </body>
 
