@@ -192,21 +192,32 @@
                         if (sure === true) {
                             this.parentElement.remove()
                             localStorage.removeItem("everything");
+                            localStorage.removeItem("count");
                             localStorage.setItem("count", JSON.stringify(ids))
                             Note = Note.filter(item => item.id !== parseInt(delet.id))
                             localStorage.setItem("everything", JSON.stringify(Note))
 
-
+                            
 
 
 
                         }
                     }
-                    Note.push(noted);
+                    ids++;
+                    
                     document.getElementById("task").value = "";
                     document.getElementById("date").value = "";
 
+                    delet.parentElement.addEventListener("mouseenter", (ev) => show())
+                delet.parentElement.addEventListener("mouseleave", (ev) => hide())
+                function hide() {
+                    delet.className = "delete delete-fade-out"
                 }
+                function show() {
+                    delet.className = "delete delete-fade-in"
+                }
+                }
+                Note.push(noted);
                 localStorage.setItem("everything", JSON.stringify(Note));
                 localStorage.setItem("count", JSON.stringify(ids));
 
@@ -254,16 +265,26 @@
                 function show() {
                     delet.className = "delete delete-fade-in"
                 }
+                
+                delet.id = Note[i].id
+                
+                delet.onclick = function () {
+                        var sure = window.confirm("Are you sure you want to delete this note?")
+                        if (sure === true) {
+                            this.parentElement.remove()
+                            localStorage.clear();
+                            localStorage.setItem("count", JSON.stringify(ids))
+                            Note = Note.filter(item => item.id !== parseInt(delet.id))
+                            localStorage.setItem("everything", JSON.stringify(Note))
+                        
+                
 
 
             }
         }
 
-
-
-
-
-
+            }
+            }        
 
 
 
