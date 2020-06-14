@@ -106,6 +106,7 @@
             position: absolute;
             left: 79.8%;
             top: 8%;
+            cursor: pointer;
             font-size: 22px;
             font-weight: bolder;
             transition: opacity 0.5s;
@@ -143,13 +144,14 @@
 
 
     <script>
+        //reset button
         function resetInput() {
             document.getElementById("task").value = "";
             document.getElementById("date").value = "";
         }
 
 
-
+        //creating note
         var ids = 1;
         var Note = [];
         function newNote() {
@@ -175,35 +177,33 @@
                     var delet = document.createElement("span");
                     var ex = document.createTextNode("\u00D7");
                     delet.classList = "delete delete-fade-out";
-                    delet.id = ids
                     delet.appendChild(ex);
                     li.appendChild(delet);
 
                     noted = new Object();
                     noted["text"] = inputVal;
                     noted["date"] = dateVal;
+                    noted["id"] = ids;
+                    ids++; 
+                    
 
-
-
-
-
+                    delet.id = ids
                     delet.onclick = function () {
-                        var sure = window.confirm("Are you sure you want to delete this note?")
-                        if (sure === true) {
                             this.parentElement.remove()
                             localStorage.removeItem("everything");
-                            localStorage.removeItem("count");
-                            localStorage.setItem("count", JSON.stringify(ids))
-                            Note = Note.filter(item => item.id !== parseInt(delet.id))
-                            localStorage.setItem("everything", JSON.stringify(Note))
+                            var index = Note.map(x => {return x.id;
+                            }).indexOf(delet.id);
 
+                            Note.splice(index, 1);
+                            localStorage.setItem("everything", JSON.stringify(Note))
+                            localStorage.setItem("count", JSON.stringify(ids))
                             
 
 
 
-                        }
+                             
                     }
-                    ids++;
+                    
                     
                     document.getElementById("task").value = "";
                     document.getElementById("date").value = "";
@@ -219,7 +219,7 @@
                 }
                 Note.push(noted);
                 localStorage.setItem("everything", JSON.stringify(Note));
-                localStorage.setItem("count", JSON.stringify(ids));
+                    localStorage.setItem("count", JSON.stringify(ids));
 
             }
         }
@@ -253,7 +253,6 @@
                 var delet = document.createElement("span");
                 var ex = document.createTextNode("\u00D7");
                 delet.classList = "delete delete-fade-out";
-                delet.id = ids
                 delet.appendChild(ex);
                 li.appendChild(delet);
 
@@ -269,18 +268,18 @@
                 delet.id = Note[i].id
                 
                 delet.onclick = function () {
-                        var sure = window.confirm("Are you sure you want to delete this note?")
-                        if (sure === true) {
                             this.parentElement.remove()
                             localStorage.clear();
-                            localStorage.setItem("count", JSON.stringify(ids))
-                            Note = Note.filter(item => item.id !== parseInt(delet.id))
+                            var index = Note.map(x => {return x.id;
+                            }).indexOf(delet.id);
+
+                            Note.splice(index, 1);
                             localStorage.setItem("everything", JSON.stringify(Note))
-                        
+                            localStorage.setItem("count", JSON.stringify(ids))
                 
 
 
-            }
+            
         }
 
             }
